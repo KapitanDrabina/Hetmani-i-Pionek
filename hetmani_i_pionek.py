@@ -9,9 +9,9 @@ def CzyHetmanZbije(xH, yH, xP, yP):     #xH, yH - wspolrzedne hetmana,     xP, y
 print('Ile hetmanow znajduje sie na planszy?')
 k=int(input('(Od 1 do 5)\n:   '))
 def Hetmani():
-    JestDuplikat=0
     WspHetmanow=[]
     while len(WspHetmanow)!=k+1:
+        JestDuplikat=0
         x = random.randrange(1, 8)
         y = random.randrange(1, 8)
         for a in range(len(WspHetmanow)):
