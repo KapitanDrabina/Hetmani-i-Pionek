@@ -1,10 +1,5 @@
 import random
-
-def CzyHetmanZbije(xH, yH, xP, yP):     #xH, yH - wspolrzedne hetmana,     xP, yP - wspolrzedne pionka
-    if abs(xH-xP)==abs(yH-yP):
-        return True
-    else:
-        return False
+from math import sqrt
 
 print('Ile hetmanow znajduje sie na planszy?')
 k=int(input('(Od 1 do 5)\n:   '))
@@ -55,3 +50,23 @@ print(plansza)
 #Do zrobienia: Sprawdzanie czy sie zbija, pozycje zbijajace i dodatkowe funkcje
 #jak bedzie wstawianie nowych, niezbijajacych hetmanow to:
 #wywalic te ktore zbijaja,  uzyc def Hetmani i usunac ostatni element
+def Pitagoras(a,b):
+    return sqrt((a[0]-b[0])**2) + sqrt((a[1]-b[1])**2)
+def CzyPomiedzy(a,c,b):
+    return Pitagoras(a, c) + Pitagoras(c, b) == Pitagoras(a, b)
+
+def zbicie(H):  #H - wspolrzedne 1 hetmana
+    if abs(H[0]-Pionek[0])==abs(H[1]-Pionek[1])or H[0]==Pionek[0] or H[1]==Pionek[1]:
+        for a in range(len(WspHetmanow)):
+            if WspHetmanow[a]!=H:
+                if CzyPomiedzy(H,WspHetmanow[a],Pionek)==True:
+                    return False
+        return True
+    return False
+
+
+Zbijajace=[]
+for a in WspHetmanow:
+    if zbicie(a)==True:
+        Zbijajace.append(a)
+print(Zbijajace)
