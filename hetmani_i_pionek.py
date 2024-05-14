@@ -4,6 +4,8 @@ from math import sqrt
 def Hetmani(ile):
     WspHetmanow=[]
     while len(WspHetmanow)!=ile+1:
+        if len(WspHetmanow)==6:
+            break
         JestDuplikat=0
         x = random.randrange(1, 8)
         y = random.randrange(1, 8)
@@ -14,7 +16,7 @@ def Hetmani(ile):
             WspHetmanow.append([x,y])
     return(WspHetmanow)
 
-WspHetmanow=Hetmani(int(input('Ile hetmanow znajduje sie na planszy?:  ')))
+WspHetmanow=Hetmani(int(input('Ile hetmanow znajduje sie na planszy? (Maksymalnie 5):  ')))
 Pionek=WspHetmanow[len(WspHetmanow)-1]
 WspHetmanow.pop()
 #tworzenie hetmanow i pionka po raz pierwszy
@@ -31,8 +33,8 @@ def plansza():
     rows = [row7, row6, row5, row4, row3, row2, row1, row0]
 
     for a in WspHetmanow:
-        rows[8 - a[1]][a[0] - 1] = ' H '  # wyswietlanie pozycji hetmanow
-    rows[8 - Pionek[1]][Pionek[0] - 1] = ' P '  # wyswietlanie pozycji pionka
+        rows[8 - a[1]][a[0] - 1] = ' H '  # dodawanie pozycji hetmanow na plansze
+    rows[8 - Pionek[1]][Pionek[0] - 1] = ' P '  # dodawanie pozycji pionka na plansze
 
     gora = ' |------------------------|\n'
     plansza = '\n' + gora
@@ -42,7 +44,7 @@ def plansza():
             plansza += rows[lista][element]
         plansza += '|\n'
     plansza += gora
-    plansza += '   1  2  3  4  5  6  7  8'  # tworzenie planszy
+    plansza += '   1  2  3  4  5  6  7  8\n\n'  # tworzenie planszy
     return (plansza)
 
 def Pitagoras(a,b):
@@ -71,21 +73,21 @@ def Wyswietlenie_zbicia():
         return("Hetmany o tych wspolrzednych moga zbic pionek: " + str(Zbijajace)+'\n')
 #te 2 funkcje to wsumie jedna ale latwiej mi bylo to zrobic dwoma funkcjami
 
-print(plansza())
-print(Wyswietlenie_zbicia())
+print(plansza() + Wyswietlenie_zbicia())
 
 while 0==0:
     akcja=int(input("Co chcesz zrobić (1,2,3 lub 4)\n\n1) Wylosowac nowa pozycje dla pionka\n2) Usuniecie dowolnego hetmana\n3) Ponowna weryfikacja bicia\n4) Zakonczyc program\n:  "))
     if akcja==4:
         break
+
     elif akcja==1:
         Pionek=Hetmani(0)[0]
-        print(plansza())
+        print('Nowa pozycja to: ' + str(Pionek))
+
     elif akcja==2:
-        print(WspHetmanow)
-        indeks=int(input('Podaj index hetmana do Usuniecia: '))
-        WspHetmanow.pop(indeks)
-        print(plansza())
+        indeks=int(input(str(WspHetmanow)+'\nPodaj index hetmana do Usuniecia: '))
+        print('Usunieto hetmana o wspolrzednych ' + str(WspHetmanow.pop(indeks)))
+
     elif akcja==3:
-        print(plansza())
-        print(Wyswietlenie_zbicia())
+        print(plansza() + Wyswietlenie_zbicia())
+#koniec :)
