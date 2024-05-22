@@ -2,7 +2,7 @@ import random
 from math import sqrt
 
 #zwraca tablice z wygenerowanymi pozycjami (odrazu uzyte do wygenerowania pozycji pionka)
-def Hetmani(ile):
+def Figury(ile):
     WspHetmanow = []
     while len(WspHetmanow) != ile+1:
         if len(WspHetmanow) == 6:
@@ -17,9 +17,8 @@ def Hetmani(ile):
             WspHetmanow.append([x,y])
     return(WspHetmanow)
 
-WspHetmanow = Hetmani(int(input('Ile hetmanow znajduje sie na planszy? (Maksymalnie 5):  ')))
-Pionek = WspHetmanow[len(WspHetmanow)-1]
-WspHetmanow.pop()
+WspHetmanow = Figury(int(input('Ile hetmanow znajduje sie na planszy? (Maksymalnie 5):  ')))
+Pionek = WspHetmanow.pop()
 #tworzenie hetmanow i pionka po raz pierwszy
 
 #funkcja tworzy pusta plansze i potem doklada na nia pozycje figur
@@ -49,18 +48,19 @@ def Pitagoras(a,b):
 def CzyPomiedzy(a,c,b): #c to punkt ktorego przynaleznosc do odcinka sie sprawdza
     return Pitagoras(a, c) + Pitagoras(c, b) == Pitagoras(a, b)
 
-def zbicie(Hetman):
+def CzyZbije(Hetman):
     if abs(Hetman[0]-Pionek[0])==abs(Hetman[1]-Pionek[1])or Hetman[0]==Pionek[0] or Hetman[1]==Pionek[1]:
-        for a in WspHetmanow:
-            if a!=Hetman:
-                if CzyPomiedzy(Hetman,a,Pionek)==True:
+        for inne in WspHetmanow:
+            if inne!=Hetman:
+                if CzyPomiedzy(Hetman,inne,Pionek)==True:
                     return False
         return True
     return False
+
 def Wyswietlenie_zbicia():
     Zbijajace=[]
     for hetman in WspHetmanow:
-        if zbicie(hetman)==True:
+        if CzyZbije(hetman)==True:
             Zbijajace.append(hetman)
     if len(Zbijajace)==0:
         wynik=('Zaden hetman nie moze zbic pionka')
@@ -69,8 +69,6 @@ def Wyswietlenie_zbicia():
     else:
         wynik=("Hetmany o tych wspolrzednych moga zbic pionek: " + str(Zbijajace)+'\n')
     return(plansza()+wynik)
-#te 2 funkcje to wsumie jedna ale latwiej mi bylo to zrobic dwoma funkcjami
-
 
 print(Wyswietlenie_zbicia())
 
@@ -81,7 +79,7 @@ while 0==0:
         break
 
     elif akcja==1:
-        Pionek=Hetmani(0)[0]
+        Pionek=Figury(0)[0]
         print('\nNowa pozycja to: ' + str(Pionek) + '\n' + Wyswietlenie_zbicia())
 
     elif akcja==2:
