@@ -1,24 +1,33 @@
 import random
 from math import sqrt
 
+WspHetmanow = []
+WspSkoczkow = []
 #zwraca tablice z wygenerowanymi pozycjami (odrazu uzyte do wygenerowania pozycji pionka)
 def Figury(ile):
-    WspHetmanow = []
-    while len(WspHetmanow) != ile+1:
-        if len(WspHetmanow) == 6:
-            break
-        JestDuplikat = 0
-        x = random.randrange(1, 8)
-        y = random.randrange(1, 8)
-        for figura in range(len(WspHetmanow)):
-            if WspHetmanow[figura] == [x,y]:
-                JestDuplikat = 1
-        if JestDuplikat == 0:
-            WspHetmanow.append([x,y])
-    return(WspHetmanow)
+    for a in range(ile+1):
 
-WspHetmanow = Figury(int(input('Ile hetmanow znajduje sie na planszy? (Maksymalnie 5):  ')))
-Pionek = WspHetmanow.pop()
+        x = random.randrange(1, 9)
+        y = random.randrange(1, 9)
+
+        while czy_duplikat([x, y], WspHetmanow):
+            x = random.randrange(1, 9)
+            y = random.randrange(1, 9)
+        if a == ile:
+            Pawn = [x, y]
+        else:
+            WspHetmanow.append([x, y])
+    return (Pawn)
+
+def czy_duplikat(nowa_figura, inne_figury):
+    for figura in inne_figury:
+        if figura == nowa_figura:
+            return True
+    return False
+
+Pionek = Figury(int(input('Ile Figur (Nie licząc pionka) znajduje sie na planszy:  ')))
+
+
 #tworzenie hetmanow i pionka po raz pierwszy
 
 #funkcja tworzy pusta plansze i potem doklada na nia pozycje figur
@@ -29,7 +38,9 @@ def plansza():
     rows = [row1.copy(), row0.copy(), row1.copy(), row0.copy(), row1.copy(), row0.copy(), row1.copy(), row0.copy()]
 
     for wsp in WspHetmanow:
-        rows[8-  wsp[1]][wsp[0] - 1] = ' H '  # dodawanie pozycji hetmanow na plansze
+        rows[8 - wsp[1]][wsp[0] - 1] = ' H '  # dodawanie pozycji hetmanow na plansze
+    for wsp in WspSkoczkow:
+        rows[8 - wsp[1]][wsp[0] - 1] = ' S '
     rows[8 - Pionek[1]][Pionek[0] - 1] = ' P '  # dodawanie pozycji pionka na plansze
 
     gora = ' +------------------------+\n'
@@ -57,32 +68,49 @@ def CzyZbije(Hetman):
         return True
     return False
 
-def Wyswietlenie_zbicia():
-    Zbijajace=[]
+def czy_skoczek_zbije(Figura):
+    if Figura[0]+2 == Pionek[0] and Figura[1]+1 == Pionek[1] or Figura[0]+2 == Pionek[0] and Figura[1]-1 == Pionek[1]:
+        return True
+    elif Figura[0]+1 == Pionek[0] and Figura[1]+2 == Pionek[1] or Figura[0]-1 == Pionek[0] and Figura[1]+2 == Pionek[1]:
+        return True
+    elif Figura[0]-2 == Pionek[0] and Figura[1]+1 == Pionek[1] or Figura[0]-2 == Pionek[0] and Figura[1]-1 == Pionek[1]:
+        return True
+    elif Figura[0]+1 == Pionek[0] and Figura[1]-2 == Pionek[1] or Figura[0]-1 == Pionek[0] and Figura[1]-2 == Pionek[1]:
+        return True
+    else:
+        return False
+
+def wyswietlanie_zbicia():
+    zbijajace = []
     for hetman in WspHetmanow:
         if CzyZbije(hetman)==True:
-            Zbijajace.append(hetman)
-    if len(Zbijajace)==0:
-        wynik=('Zaden hetman nie moze zbic pionka')
-    elif len(Zbijajace)==1:
-        wynik=('Hetman o tych wspolrzednych moze zbic pionka: '+str(Zbijajace)+'\n')
+            zbijajace.append(hetman)
+    for skoczek in WspSkoczkow:
+        if czy_skoczek_zbije(skoczek)==True:
+            zbijajace.append(skoczek)
+    if len(zbijajace)==0:
+        return(plansza() + "Żadna figura nie ma opcji zbicia pionka\n")
     else:
-        wynik=("Hetmany o tych wspolrzednych moga zbic pionek: " + str(Zbijajace)+'\n')
-    return(plansza()+wynik)
+        return(plansza() + 'Figury o tych współrzędnych mogą zbić pionka: ' + str(zbijajace) + '\n')
 
-print(Wyswietlenie_zbicia())
+print(wyswietlanie_zbicia())
 
 
 while 0==0:
-    akcja=int(input("Co chcesz zrobić (1,2 lub 3)\n\n1) Wylosowac nowa pozycje dla pionka\n2) Usuniecie dowolnego hetmana\n3) Zakonczyc program\n\n:  "))
-    if akcja==3:
+    akcja=int(input("Co chcesz zrobić (1,2 lub 3)\n\n1) Wylosowac nowa pozycje dla pionka\n2) Usuniecie dowolnego hetmana\n3) Dodanie skoczka na planszę (o losowej pozycji)\n4) Zakonczyc program\n\n:  "))
+    if akcja==4:
         break
 
     elif akcja==1:
         Pionek=Figury(0)[0]
-        print('\nNowa pozycja to: ' + str(Pionek) + '\n' + Wyswietlenie_zbicia())
+        print('\nNowa pozycja to: ' + str(Pionek) + '\n' + wyswietlanie_zbicia())
 
     elif akcja==2:
         indeks=int(input(str(WspHetmanow)+'\nPodaj index hetmana do Usuniecia: '))
-        print('\nUsunieto hetmana o wspolrzednych ' + str(WspHetmanow.pop(indeks)) + '\n' + Wyswietlenie_zbicia())
+        print('\nUsunieto hetmana o wspolrzednych ' + str(WspHetmanow.pop(indeks)) + '\n' + wyswietlanie_zbicia())
+
+    elif akcja == 3:
+        WspSkoczkow.append(Figury(0))
+        print('Dodano skoczka na plansze.\n' + wyswietlanie_zbicia() + '\n')
+
 #koniec :)
