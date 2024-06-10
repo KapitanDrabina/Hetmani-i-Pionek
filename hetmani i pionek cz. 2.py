@@ -35,7 +35,7 @@ def Pawn():
     wszystkie_figury = WspHetmanow + WspSkoczkow
     x = random.randrange(1, 9)
     y = random.randrange(1, 9)
-    while czy_duplikat([x, y], wszystkie_figury) == True:
+    while czy_duplikat([x, y], wszystkie_figury):
         x = random.randrange(1, 9)
         y = random.randrange(1, 9)
     return ([x, y])
@@ -59,21 +59,18 @@ def plansza():
 
     gora = ' +------------------------+\n'
     plansza = '\n' + gora
-    for lista in range(len(rows)):
-        plansza += (str(8 - lista) + '|')
-        for element in range(len(row0)):
-            plansza += rows[lista][element]
+    for (index, row) in enumerate(rows):
+        plansza += (str(8 - index) + '|')
+        for element in row:
+            plansza += element
         plansza += '|\n'
-    plansza += gora
-    plansza += '   1  2  3  4  5  6  7  8\n\n'  # tworzenie planszy
+    plansza += f'{gora}   1  2  3  4  5  6  7  8\n\n'  # tworzenie planszy
     return (plansza)
 
 def Pitagoras(a,b):
     return sqrt((a[0]-b[0])**2 + (a[1]-b[1])**2)
 def CzyPomiedzy(a,c,b): #c to punkt ktorego przynaleznosc do odcinka sie sprawdza
     return Pitagoras(a, c) + Pitagoras(c, b) == Pitagoras(a, b)
-
-
 
 def czy_hetman_zbije(Hetman):
     wszystkie_figury = WspHetmanow + WspSkoczkow
@@ -100,11 +97,12 @@ def czy_skoczek_zbije(Figura):
 def wyswietlanie_zbicia():
     zbijajace = []
     for hetman in WspHetmanow:
-        if czy_hetman_zbije(hetman)==True:
+        if czy_hetman_zbije(hetman):
             zbijajace.append(hetman)
     for skoczek in WspSkoczkow:
-        if czy_skoczek_zbije(skoczek)==True:
+        if czy_skoczek_zbije(skoczek):
             zbijajace.append(skoczek)
+
     if len(zbijajace)==0:
         return(plansza() + "Żadna figura nie ma opcji zbicia pionka\n")
     else:
@@ -112,7 +110,7 @@ def wyswietlanie_zbicia():
 
 print(wyswietlanie_zbicia())
 
-while 0==0:
+while True:
     akcja=int(input('Co chcesz zrobić?\n\n 1) Wylosować nową pozycję dla pionka\n 2) Usunięcie dowolnej figury\n 3) Dodanie nowej, losowej figury\n 4) Zakończyć program\n:  '))
 
     if akcja == 4:
